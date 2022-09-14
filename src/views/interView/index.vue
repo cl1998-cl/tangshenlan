@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import Img from '../../assets/img/clock_date.png'
+import Img from '../../static/img/clock_date.png'
 class TreeItem extends Object {
     constructor (text, id, children, placeholder = '请填写', icon = 'el-icon-menu') {
         super()

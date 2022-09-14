@@ -88,6 +88,14 @@ const routes = [
 					title: 'grid系统'
 				}
 			},
+			{
+				path: '/swiper',
+				name: 'swiper',
+				component: () => import('@/views/swiper/demo1/index'),
+				meta: {
+					title: 'swiper卡片'
+				}
+			},
 		
 		]
 		

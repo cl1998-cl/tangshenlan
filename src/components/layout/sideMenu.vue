@@ -2,7 +2,6 @@
     <div :style="{width: width}" class="cflex menu_left">
         <div class="menu_page_top rflex">
             <span class="logo">pomelo</span>
-
         </div>
         <div class="menu_page_bottom is-scroll-left">
             <el-menu :default-active="activeIndex"
@@ -81,6 +80,16 @@ export default {
                         {
                             title: 'grid',
                             path: '/grid'
+                        }
+                    ]
+                },
+                {
+                    title: 'swiper',
+                    path: '/swiper',
+                    child: [
+                        {
+                            title: '例子1',
+                            path: '/swiper'
                         }
                     ]
                 }

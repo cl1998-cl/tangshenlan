@@ -9,6 +9,20 @@ module.exports = {
                 "@": resolve("src")
             }
         },
+        module: {
+            rules: [
+                {
+                    test: /\.(png|jpg|gif)$/,
+                    use: [
+                        {
+                            loader: 'file-loader',
+                            options: {}
+                        }
+                    ]
+                }
+            ],
+        },
     },
+   
     lintOnSave: false
 }
