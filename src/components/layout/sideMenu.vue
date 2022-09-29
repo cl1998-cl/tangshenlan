@@ -58,8 +58,18 @@ export default {
                     path: '/form'
                 },
                 {
-                    title: '树形',
-                    path: '/tree'
+                    title: '移动端',
+                    path: '/btnav',
+                    child: [
+                        {
+                            title: '底部导航栏',
+                            path: '/btnav'
+                        },
+                        {
+                            title: '下拉刷新',
+                            path: '/refresh'
+                        },
+                    ]
                 },
                 {
                     title: '文件上传',

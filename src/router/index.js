@@ -96,6 +96,22 @@ const routes = [
 					title: 'swiper卡片'
 				}
 			},
+			{
+				path: '/btnav',
+				name: 'nav',
+				component: () => import('@/views/mobile/nav/index'),
+				meta: {
+					title: '底部导航栏'
+				}
+			},
+			{
+				path: '/refresh',
+				name: 'refresh',
+				component: () => import('@/views/mobile/ui/refresh/index'),
+				meta: {
+					title: '下拉刷新'
+				}
+			},
 		
 		]
 		

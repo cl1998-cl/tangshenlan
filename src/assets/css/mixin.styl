@@ -1,0 +1,8 @@
+@import "variable.styl"
+changeColor(a)
+  $text-color = a
+:export  {
+  textColor: $text-color
+  bgColor: $box-bg-color
+  changeColor: changeColor
+}

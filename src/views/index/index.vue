@@ -1,5 +1,6 @@
 <template>
     <div class="container">
+        {{test.a ? test.a.b: ''}}
         <!--       <s-z></s-z>-->
         <template v-for="item in cardList">
             <div :id="item.ref" class="card flex_item" @mouseenter="cardEnter">
@@ -80,7 +81,9 @@ export default {
                     show: true
                 }
             ],
-            test: '123'
+            test: {
+
+            }
         }
     },
     async mounted () {
@@ -88,14 +91,9 @@ export default {
     },
     methods: {
         addAnimate (item) {
-            this.test = Math.random()
-            console.log('test', this.$refs.test.innerHTML)
-            Promise.resolve().then(res => {
-                console.log('wei', this.$refs.test.innerHTML)
-            })
-            this.$nextTick(() => {
-                console.log('next', this.$refs.test.innerHTML)
-            })
+
+
+            console.log(this.test.a)
             let dom = document.getElementById(item.ref)
             let children = [...dom.childNodes]
             children.forEach(node => {
@@ -127,12 +125,8 @@ export default {
             return ""
         },
         cardEnter(e){
-            console.log(e)
-            let a
-            a = 1
-            a = 2
-            a = 3
-            //a = 3
+
+
         },
 
 

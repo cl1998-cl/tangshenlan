@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+</head>
+<body>
+<script src="aaa.js"></script>
+<div id="app">
+	<h1>差值表达式</h1>
+	<h3>{{msg}}</h3>
+	<h3>{{count}}</h3>
+	<h1>v-text</h1>
+	<h3 v-text="msg"></h3>
+	<h1>v-model</h1>
+	<input type="text" v-model="msg">
+	<input type="text" v-model="count">
+</div>
+<script>
+	let vm = new Vue({
+		el: '#app',
+		data: {
+			msg: 'Hello World',
+			count: 100,
+			person: {
+				name: 'pomelo'
+			}
+		}
+	})
+	const words = ['one', 'two', 'three', 'four'];
+	words.forEach((word) => {
+		console.log(word);
+		debugger
+		if (word === 'two') {
+			words.shift(); //'one' 将从数组中删除
+		}
+	});
+</script>
+</body>
+</html>
