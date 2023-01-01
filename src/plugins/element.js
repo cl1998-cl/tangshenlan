@@ -23,6 +23,12 @@ Vue.use(Element);
 //
 // Vue.use(Vant);
 
+//easy-table
+import "vue-easytable/libs/theme-default/index.css";
+// 引入组件库
+import VueEasytable from "vue-easytable";
+
+Vue.use(VueEasytable);
 //mock
 
 import '@/mock/index'

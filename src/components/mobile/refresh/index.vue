@@ -1,8 +1,14 @@
 <template>
 <div class="refresh">
-    <div class="track" ref="track" >
-        <div class="head">
-            <div class="text">aaa</div>
+    <div class="track"
+         ref="track"
+         @touchstart="onTouchStart"
+         @touchmove="onTouchMove"
+         @touchend="onTouchEnd"
+         @touchcancel="onTouchEnd"
+    >
+        <div class="head" :style="{top: headH}">
+            <div class="text" :class="{tran: isTran}"><i class="el-icon-bottom"></i></div>
         </div>
         <slot></slot>
     </div>
@@ -33,91 +39,56 @@ export default {
             type: [Number, String],
             default: DEFAULT_HEAD_HEIGHT
         }
-
-
-
     },
     data(){
         return {
             status: STATE_MAP.normal,
             ceiling: '',
+            showHead: false,
+            startY: null,
+            moveHeight: null,
+            headHY: -300,
+            isTran: false,
+
         }
     },
     computed: {
         //是否可触摸
         touchable(){
             return this.status === STATE_MAP.normal
+        },
+        headH(){
+            return `${this.headHY}px`
         }
     },
     mounted(){
-        this.initTouch(this.$refs.track)
         scrollEL = this.getScroller(this.$el)
     },
     methods: {
-        initTouch(el){
-            const {onTouchStart, onTouchMove, onTouchEnd} = this
-            this.on(el, 'touchstart', onTouchStart)
-            this.on(el, 'touchmove', onTouchMove)
-            this.on(el, 'touchend', onTouchEnd)
-            this.on(el, 'touchcancel', onTouchEnd)
-        },
-        //给元素添加相关事件
-        on(target, event, fn){
-            target.addEventListener( event, fn)
-        },
-        touchStart(event){
-            this.resetTouchStatus()
-            this.startX = event.touches[0].clientX
+        onTouchStart(event){
+            if(!this.touchable) return false
             this.startY = event.touches[0].clientY
         },
-        touchMove(event) {
-            const touch = event.touches[0];
-            this.deltaX = touch.clientX < 0 ? 0 : touch.clientX - this.startX;
-            this.deltaY = touch.clientY - this.startY;
-            this.offsetX = Math.abs(this.deltaX);
-            this.offsetY = Math.abs(this.deltaY);
-            const LOCK_DIRECTION_DISTANCE = 10;
-            if (
-                !this.direction ||
-                (this.offsetX < LOCK_DIRECTION_DISTANCE &&
-                    this.offsetY < LOCK_DIRECTION_DISTANCE)
-            ) {
-                this.direction = this.getDirection(this.offsetX, this.offsetY);
-            }
-        },
-        touchEnd(event){
-
-        },
-        onTouchStart(event){
-            if(this.touchable){
-                this.checkPullStart(event)
-            }
-        },
         onTouchMove(event){
-            if(!this.touchable) return
-            if(!this.ceiling) {
-                this.checkPullStart()
-            }
-            this.touchMove(event)
+            if(!this.touchable) return false
+            this.moveHeight = Math.floor(event.touches[0].clientY - this.startY)
+            this.isTran = this.moveHeight > 50;
+            if(this.moveHeight > 200) return;
+            this.$refs.track.style.transform = `translateY(${this.moveHeight}px)`
+
         },
         onTouchEnd(event){
-            if (this.touchable && this.ceiling && this.deltaY) {
-                this.duration = this.animationDuration;
-                if (this.status === 'loosing') {
-                    this.$nextTick(() => {
-                        this.$emit('refresh');
-                    });
-                } else {
-                }
-            }
+            if(!this.touchable) return false
+            this.$refs.track.style.transition = 'all 0.7s'
+            this.$refs.track.style.transform = `translateY(0px)`
+            this.startY = 0
+            this.isTran = false
+            setTimeout(() => {
+                this.$refs.track.style.transition = 'none'
+            },700)
+            //this.headHY = -50
         },
-        checkPullStart(event){
-            this.ceiling = this.getScrollTop(scrollEL) === 0
-            if(this.ceiling){
 
-                this.touchStart(event)
-            }
-        },
         resetTouchStatus(){
             this.direction = '';
             this.deltaX = 0;
@@ -168,19 +139,34 @@ export default {
 .refresh{
     overflow hidden
     user-select none
+    height: 100%;
 
     .track{
         position: relative
+        height:100%;
+
 
         .head{
             position absolute
             left 0
-            width 100%
-            height: 50px;
-            line-height 50px
-            text-align center
+            right 0
+            height: 300px;
+            display flex
+            align-items end
+            justify-content center
             color #969799FF
+            background-color #34b9a4
+
+            .text{
+                text-align center
+                transition all 0.7s
+            }
+
         }
     }
 }
+    .tran{
+        transform rotate(-180deg)
+
+    }
 </style>

@@ -31,7 +31,8 @@ import SZ from '@/components/css/sz'
 export default {
     name: 'index',
     components: {
-        SZ
+        SZ,
+
     },
     data () {
         return {
@@ -85,6 +86,9 @@ export default {
 
             }
         }
+    },
+    computed: {
+
     },
     async mounted () {
 

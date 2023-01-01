@@ -112,6 +112,14 @@ const routes = [
 					title: '下拉刷新'
 				}
 			},
+			{
+				path: '/form',
+				name: 'form',
+				component: () => import('@/views/form/index'),
+				meta: {
+					title: 'form表单'
+				}
+			}
 		
 		]
 		
@@ -120,7 +128,7 @@ const routes = [
 
 const router = new VueRouter({
 	routes,
-	mode: 'history'
+	mode: 'hash'
 })
 const VueRouterPush = VueRouter.prototype.push
 VueRouter.prototype.push = function push (to) {

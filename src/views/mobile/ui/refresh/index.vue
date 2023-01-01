@@ -18,6 +18,10 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="stylus">
+.container{
+    height: 500px;
+    background-color: darkgray;
+    width: 300px;
+}
 </style>

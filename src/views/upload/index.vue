@@ -1,13 +1,13 @@
 <template>
     <div class="fill_content">
         <input id="file" type="file" @change="handleFileChange"/>
-        <el-button type="primary" size="mini" @click="handleUpload">上传</el-button>
+        <el-button size="mini" type="primary" @click="handleUpload">上传</el-button>
     </div>
 </template>
 
 <script>
 
-const SIZE = 10 * 1024 * 1024;
+const SIZE = 10 * 1024 * 1024
 const STATE_MAP = {
     wait: 'wait',
     pause: 'pause',
@@ -16,7 +16,7 @@ const STATE_MAP = {
 
 export default {
     name: 'index',
-    data(){
+    data () {
         return {
             container: {
                 file: null,
@@ -33,17 +33,17 @@ export default {
     },
 
     computed: {
-        uploadDisabled() {
+        uploadDisabled () {
 
         },
-        uploadPercentage() {
+        uploadPercentage () {
 
         }
     },
 
     watch: {
-        uploadPercentage(val) {
-            if(val > this.fakeUploadPercentage) {
+        uploadPercentage (val) {
+            if (val > this.fakeUploadPercentage) {
                 this.fakeUploadPercentage = val
             }
         }
@@ -51,132 +51,129 @@ export default {
 
     methods: {
 
-        async handleDelete() {
-            const {data} = await this.request({url: 'https://123.com'});
-            if(data.code === 0) {
+        async handleDelete () {
+            const { data } = await this.request({ url: 'https://123.com' })
+            if (data.code === 0) {
                 this.$message.success('删除成功！')
             }
         },
 
-        handlePause() {
-            this.status = STATE_MAP.pause;
-            this.resetData();
+        handlePause () {
+            this.status = STATE_MAP.pause
+            this.resetData()
         },
 
-        resetData() {
-            this.requestList.forEach(i => i?.abort());
-            this.requestList = [];
-            if(this.container.worker) {
-                this.container.worker.message = null;
+        resetData () {
+            this.requestList.forEach(i => i?.abort())
+            this.requestList = []
+            if (this.container.worker) {
+                this.container.worker.message = null
             }
 
         },
 
-        async handleResume() {
-            this.status = STATE_MAP.uploading;
-            const {uploadList} = await this.verifyUpload(this.container.file.name, this.container.hash);
+        async handleResume () {
+            this.status = STATE_MAP.uploading
+            const { uploadList } = await this.verifyUpload(this.container.file.name, this.container.hash)
             await this.uploadChunks(uploadList)
 
         },
 
-
-
-        request({
+        request ({
             url,
-            method='post',
+            method = 'post',
             data,
             headers = {},
             onProgress = e => e,
             requestList
         }) {
             return new Promise(resolve => {
-                const xhr = new XMLHttpRequest();
-                xhr.upload.onprogress = onProgress;
-                xhr.open(method, url);
+                const xhr = new XMLHttpRequest()
+                xhr.upload.onprogress = onProgress
+                xhr.open(method, url)
                 Object.keys(headers).forEach(key => {
                     xhr.setRequestHeader(key, headers[key])
                 })
-                xhr.send(data);
+                xhr.send(data)
 
                 xhr.onload = e => {
-                    if(requestList) {
-                        const xhrIndex = requestList.findIndex(item => item === xhr);
-                        requestList.splice(xhrIndex, 1);
+                    if (requestList) {
+                        const xhrIndex = requestList.findIndex(item => item === xhr)
+                        requestList.splice(xhrIndex, 1)
                     }
                     resolve({
                         data: e.target.response
                     })
                 }
 
-                requestList?.push(xhr);
+                requestList?.push(xhr)
             })
         },
 
-        createFileChunk(file, size = SIZE) {
-            const fileChunkList = [];
-            let cur = 0;
-            while(cur < file.size) {
-                fileChunkList.push({file: file.slice(cur, cur + size)});
-                cur += size;
+        createFileChunk (file, size = SIZE) {
+            const fileChunkList = []
+            let cur = 0
+            while (cur < file.size) {
+                fileChunkList.push({ file: file.slice(cur, cur + size) })
+                cur += size
             }
-            return fileChunkList;
+            return fileChunkList
         },
 
-        calculateHash(fileChunkList) {
+        calculateHash (fileChunkList) {
             return new Promise(resolve => {
-                this.container.worker = new Worker("./hash.js");
-                this.container.worker.postMessage({fileChunkList});
+                this.container.worker = new Worker('./hash.js')
+                this.container.worker.postMessage({ fileChunkList })
                 this.container.worker.onmessage = e => {
-                    const {percentage, hash} = e.data;
-                    this.hashPercentage = percentage;
-                    if(hash) {
-                        resolve(hash);
+                    const { percentage, hash } = e.data
+                    this.hashPercentage = percentage
+                    if (hash) {
+                        resolve(hash)
                     }
                 }
             })
         },
 
-        handleFileChange(e) {
+        handleFileChange (e) {
             const [file] = e.target.files
-            if(!file) return;
-            Object.assign(this.$data, this.$options.data());
-            this.container.file = file;
+            if (!file) return
+            Object.assign(this.$data, this.$options.data())
+            this.container.file = file
         },
 
-
-        async handleUpload() {
-            if(!this.container.file) return;
-            this.status = STATE_MAP.uploading;
-            const fileChunkList = this.createFileChunk(this.container.file);
-            this.container.hash = await this.calculateHash(fileChunkList);
-            const {shouldUpload, uploadList} = await this.verifyUpload(
+        async handleUpload () {
+            if (!this.container.file) return
+            this.status = STATE_MAP.uploading
+            const fileChunkList = this.createFileChunk(this.container.file)
+            this.container.hash = await this.calculateHash(fileChunkList)
+            const { shouldUpload, uploadList } = await this.verifyUpload(
                 this.container.file.name,
                 this.container.hash
             )
 
-            if(!shouldUpload) {
-                this.$message.success('1111');
-                this.status = STATE_MAP.wait;
-                return;
+            if (!shouldUpload) {
+                this.$message.success('1111')
+                this.status = STATE_MAP.wait
+                return
             }
 
-            this.data = fileChunkList.map(({ file },index) => ({
+            this.data = fileChunkList.map(({ file }, index) => ({
                 fileHash: this.container.hash,
                 index,
                 hash: this.container.hash + '-' + index,
                 chunk: file,
                 size: file.size,
-                percentage: uploadList.includes(index)? 100 : 0
+                percentage: uploadList.includes(index) ? 100 : 0
 
             }))
 
-            await this.uploadChunks(uploadList);
+            await this.uploadChunks(uploadList)
         },
 
-        async uploadChunks(uploadList = []) {
+        async uploadChunks (uploadList = []) {
             const requestList = this.data
                 .filter((hash) => !uploadList.includes(hash))
-                .map(({formData, index}) => {
+                .map(({ formData, index }) => {
                     this.request({
                         url: 'http://localhost:8080',
                         data: formData,
@@ -184,29 +181,48 @@ export default {
                         requestList: this.requestList
                     })
                 })
-            await Promise.all(requestList);
+            await Promise.all(requestList)
 
-            if(uploadList.length + requestList.length === this.data.length){
-                await this.mergeRequest();
+            if (uploadList.length + requestList.length === this.data.length) {
+                await this.mergeRequest()
             }
 
         },
 
-        async mergeRequest() {
+        async mergeRequest () {
             await this.request({
                 url: '0000',
                 headers: {
-                    'content-type': "application/json"
+                    'content-type': 'application/json'
                 },
                 data: JSON.stringify({
                     size: SIZE,
                     fileHash: this.container.hash,
                     filename: this.container.file.name
                 })
-            });
+            })
 
-            this.$message.success('222');
-            this.status = STATE_MAP.wait;
+            this.$message.success('222')
+            this.status = STATE_MAP.wait
+        },
+
+        handleData () {
+            let testList = [
+                { id: 'SLP38', linkItem: '0', height: '0', length: '100', endPoint: false },
+                { id: 'SLP39', linkItem: 'SLP41', height: '-5', length: '100', endPoint: false },
+                { id: 'SLP40', linkItem: 'SLP39', height: '-5', length: '100', endPoint: false },
+                { id: 'SLP41', linkItem: 'SLP38', height: '5', length: '100', endPoint: false },
+                { id: 'SLP42', linkItem: 'SLP43', height: '5', length: '100', endPoint: false },
+                { id: 'SLP43', linkItem: 'SLP40', height: '0', length: '100', endPoint: false },
+                { id: 'SLP44', linkItem: 'SLP42', height: '-5', length: '100', endPoint: false },
+                { id: 'SLP45', linkItem: 'SLP44', height: '-5', length: '100', endPoint: false },
+                { id: 'SLP46', linkItem: 'SLP45', height: '-5', length: '100', endPoint: false },
+                { id: 'SLP47', linkItem: 'SLP50', height: '0', length: '100', endPoint: false },
+                { id: 'SLP48', linkItem: 'SLP49', height: '5', length: '100', endPoint: true },
+                { id: 'SLP49', linkItem: 'SLP47', height: '5', length: '100', endPoint: false },
+                { id: 'SLP50', linkItem: 'SLP46', height: '0', length: '100', endPoint: false }]
+
+
         }
     }
 

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<!-- import CSS -->
+</head>
+<body>
+
+</body>
+<!--&lt;!&ndash; import Vue before Element &ndash;&gt;-->
+<!--<script src="https://unpkg.com/vue@2/dist/vue.js"></script>-->
+<!--&lt;!&ndash; import JavaScript &ndash;&gt;-->
+<!--<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
+<script>
+
+	// const ElTooltip = Vue.options.components.ElTooltip
+	// let toolTip = new ElTooltip().$mount(document.createElement('div'))
+	// let options = toolTip.$options
+	// options.props.effect.default = 'light'
+	// options.props.openDelay.default = 500
+	// //let newTip = Vue.extend(toolTip)
+	// // Vue.component('ElTooltip2', toolTip)
+	//
+	//
+	// console.log('ElTooltip',toolTip, typeof toolTip)
+	//
+	//
+	// const vm = new Vue({
+	// 	el: '#app',
+	// 	data: function() {
+	// 		return { visible: false }
+	// 	}
+	// })
+
+const log = console.log
+	var o = (function(){
+		var obj = {
+			a: 1,
+			b: 2,
+		}
+		return {
+			get: function(k){
+				return obj[k]
+			}
+		}
+	})()
+	log(o.get('a'))
+	let code = `with(this) {a = 5}`
+	let fn = new Function(code)
+	Object.defineProperty(Object.prototype, 'c',{
+		get: function (){
+			fn.call(this)
+		}
+	})
+	o.get('c')
+	log(o.get('a'))
+
+
+</script>
+</html>

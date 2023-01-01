@@ -1,5 +1,5 @@
 <template>
-    <div class="head_nav rflex" style="width: 1260px;line-height: 60px;">
+    <div class="head_nav rflex">
       <div class="right_nav rflex">
         <div class="head_menu rflex">
             <div class="head_menu_item cursor">知识产权</div>
@@ -10,7 +10,7 @@
             <el-input v-model="searchText" placeholder="搜索" size="mini"></el-input>
         </div>
         <div class="head_github"></div>
-      </div> 
+      </div>
     </div>
 </template>
 
@@ -30,10 +30,12 @@ export default {
         position: fixed;
         top: 0;
         right: 0;
+        left 180px
         z-index: 29;
         transition: width .2s;
         justify-content: space-between;
         height: 60px;
+        line-height 60px
         box-sizing: border-box;
         background: #fff;
 }
@@ -43,7 +45,7 @@ export default {
         width:calc(100% - 180px);
         padding-right: 15px;
         justify-content: space-between;
-        box-shadow:0px 2px 5px 0px rgba(237,233,233,0.5);
+        box-shadow:0 2px 5px 0 rgba(237,233,233,0.5);
 }
 
 .head_menu{
@@ -54,7 +56,7 @@ export default {
   }
 
   .head_menu_item{
-    font-size: 12px;  
+    font-size: 12px;
   }
   &:nth-child(1) {
     margin-left: 20px;

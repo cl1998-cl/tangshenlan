@@ -1,7 +1,7 @@
 <template>
     <div class="home rflex">
         <side-menu></side-menu>
-        <div class="menu_right wflex el-scrollbar" style="left: 180px">
+        <div class="menu_right wflex el-scrollbar">
             <p-head></p-head>
             <div class="menu_content">
                  <router-view></router-view><!--页面渲染入口-->
@@ -32,6 +32,7 @@ export default {
             top:0;
             bottom:0;
             background:#f0f2f5;
+            width calc(100% - 180px)
             .menu_content{
                 margin-top: 60px;
                 position: relative;

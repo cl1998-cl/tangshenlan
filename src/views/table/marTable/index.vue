@@ -4,32 +4,32 @@
             <el-button size="mini" type="primary" @click="getTableData">查询</el-button>
         </div>
 
-        <!--        <div class="table_box card-box">-->
-        <!--            <el-table-->
-        <!--                :data="tableData"-->
-        <!--                :span-method="arraySpanMethod"-->
-        <!--                border-->
-        <!--                header-row-class-name="table_head"-->
-        <!--                height="275"-->
-        <!--                highlight-current-row-->
-        <!--                size="mini"-->
-        <!--                style="width:100%"-->
-        <!--            >-->
-        <!--                <el-table-column label="国家" min-width="110" prop="nation"></el-table-column>-->
-        <!--                <el-table-column label="职业" min-width="110" prop="occupation"></el-table-column>-->
-        <!--                <el-table-column label="性别" min-width="90" prop="sex"></el-table-column>-->
-        <!--                <el-table-column label="技能数量" min-width="90" prop="skillNum"></el-table-column>-->
-        <!--            </el-table>-->
-        <!--        </div>-->
-        <!--        <div>{{ $store.state }}</div>-->
-        <!--        <div>{{ $store.getters }}</div>-->
-        <!--        <div>{{b}}</div>-->
-        <!--        <el-button type="primary" @click="testA">mutation</el-button>-->
-        <!--        <el-button type="primary" @click="testB">actions</el-button>-->
-        <!--        <child :a="b" @changeA="changeA"></child>-->
-        <!--        <button ref="button" @click="test3();test4()">哈哈哈哈</button>-->
-        <!--        <el-button type="primary">{{ this.name }}</el-button>-->
-        <!--        <el-button type="primary">{{ this.age }}</el-button>-->
+                <div class="table_box card-box">
+                    <el-table
+                        :data="tableData"
+                        :span-method="arraySpanMethod"
+                        border
+                        header-row-class-name="table_head"
+                        height="275"
+                        highlight-current-row
+                        size="mini"
+                        style="width:100%"
+                    >
+                        <el-table-column label="国家" min-width="110" prop="nation"></el-table-column>
+                        <el-table-column label="职业" min-width="110" prop="occupation"></el-table-column>
+                        <el-table-column label="性别" min-width="90" :formatter="sexFormat" prop="sex"></el-table-column>
+                        <el-table-column label="技能数量" min-width="90" prop="skillNum"></el-table-column>
+                    </el-table>
+                </div>
+                <div>{{ $store.state }}</div>
+                <div>{{ $store.getters }}</div>
+                <div>{{b}}</div>
+                <el-button type="primary" @click="testA">mutation</el-button>
+                <el-button type="primary" @click="testB">actions</el-button>
+                <child :a="b" @changeA="changeA"></child>
+
+                <el-button type="primary">{{ this.name }}</el-button>
+                <el-button type="primary">{{ this.age }}</el-button>
         <div class="card-box">
             <div class="round">
                 <div class="p_round">222</div>
@@ -98,16 +98,13 @@ export default {
     },
     methods: {
         async getTableData () {
-            // let param = {}
-            // const { code, data } = await getUserInfo(param)
-            // if (code === '200') {
-            //     this.spanArray = this.computedSpan(this.spanList, data)
-            //     this.tableData = data
-            //
-            // }
-            this._loading.show({
-                text: "加载哈哈哈"
-            })
+            let param = {}
+            const { code, data } = await getUserInfo(param)
+            if (code === '200') {
+                this.spanArray = this.computedSpan(this.spanList, data)
+                this.tableData = data
+
+            }
         },
         getHeadClass ({ row, rowIndex }) {
             console.log(row, rowIndex)
@@ -150,6 +147,9 @@ export default {
             let colNum = rowNum === 0 ? 0 : 1
             return [rowNum, colNum]
         },
+        sexFormat(row, column, value, $index){
+
+        },
         testImport () {
             console.log('设置成功')
         },
@@ -175,19 +175,7 @@ export default {
                 console.log(num)
             }
         },
-        test4 () {
-            let num = 3
-            aa()
-            aa()
 
-            function aa () {
-                num++
-                Promise.resolve().then(() => {
-                    console.log(num + 'set')
-                })
-                console.log(num)
-            }
-        }
     },
 }
 </script>

@@ -9,7 +9,7 @@ import store from './lib/store/index'
 Vue.config.productionTip = false;
 //
 
-
+const log = console.log
 new Vue({
   router,
   store,
